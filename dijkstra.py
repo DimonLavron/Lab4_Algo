@@ -22,11 +22,10 @@ with open("dijkstra.in", "r") as f:
     while len(min_heap) > 0:
         min_vertex = heapq.heappop(min_heap)[1]
 
-        for i in graph[min_vertex]:
-            if min_path[i[0]] > min_path[min_vertex] + i[1]:
-                min_path[i[0]] = min_path[min_vertex] + i[1]
-                heapq.heappush(min_heap, (min_path[i[0]], i[0]))
-
+        for v, w in graph[min_vertex]:
+            if min_path[v] > min_path[min_vertex] + w:
+                min_path[v] = min_path[min_vertex] + w
+                heapq.heappush(min_heap, (min_path[v], v))
 
     avg = 0
     cnt = 0
