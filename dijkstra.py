@@ -1,9 +1,11 @@
+import heapq
+
 with open("dijkstra.in", "r") as f:
     n, s = map(int, f.readline().split())
 
     maxn = 100005
-    inf = 1000000000000005
-    used = [False] * maxn
+    inf = float('inf')
+    min_path = [inf] * maxn
     n_vertex = -1
     graph = [[] for i in range(maxn)]
 
@@ -13,25 +15,18 @@ with open("dijkstra.in", "r") as f:
         n_vertex = max(n_vertex, max(v1,v2))
 
     n_vertex += 1
-    min_path = [inf] * n_vertex
+    min_heap = [(0, s)]
+    heapq.heapify(min_heap)
     min_path[s] = 0
 
-    while True:
-        min_val = inf
-        min_vertex = -1
-        for i in range(n_vertex):
-            if min_path[i] < min_val and not used[i]:
-                min_val = min_path[i]
-                min_vertex = i
-
-        if min_val == inf:
-            break
-
-        used[min_vertex] = True
+    while len(min_heap) > 0:
+        min_vertex = heapq.heappop(min_heap)[1]
 
         for i in graph[min_vertex]:
             if min_path[i[0]] > min_path[min_vertex] + i[1]:
                 min_path[i[0]] = min_path[min_vertex] + i[1]
+                heapq.heappush(min_heap, (min_path[i[0]], i[0]))
+
 
     avg = 0
     cnt = 0
